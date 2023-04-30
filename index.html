@@ -27,7 +27,7 @@
         var video = document.querySelector('#video-container iframe');
         video.contentWindow.postMessage('{"method":"play"}', '*');
       }
-      setTimeout(playVideo, getMillisecondsUntilTime(14, 13));
+      setTimeout(playVideo, getMillisecondsUntilTime(16, 22));
       
       function getMillisecondsUntilTime(hours, minutes) {
         var now = new Date();
