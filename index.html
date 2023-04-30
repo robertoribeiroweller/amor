@@ -2,15 +2,14 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Reprodução automática de vídeo do Vimeo</title>
+    <title>Meu vídeo do Vimeo</title>
     <style>
-      #player {
+      #video-container {
         position: relative;
-        width: 100%;
+        padding-bottom: 56.25%; /* proporcional à largura do vídeo (16:9) */
         height: 0;
-        padding-bottom: 56.25%;
       }
-      #player iframe {
+      #video-container iframe {
         position: absolute;
         top: 0;
         left: 0;
@@ -20,25 +19,25 @@
     </style>
   </head>
   <body>
-    <div id="player"></div>
+    <div id="video-container">
+      <iframe src="https://player.vimeo.com/video/123456789" frameborder="0" allowfullscreen></iframe>
+    </div>
     <script>
-      function playVideoAtTime() {
-        var currentTime = new Date();
-        var targetTime = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), 14, 10, 0);
-        var timeUntilTarget = targetTime.getTime() - currentTime.getTime();
-        if (timeUntilTarget <= 0) {
-          playVideo();
-        } else {
-          setTimeout(playVideo, timeUntilTarget);
-        }
-      }
-
       function playVideo() {
-        var player = document.getElementById("player");
-        player.innerHTML = '<iframe src="https://player.vimeo.com/video/202228191?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+        var video = document.querySelector('#video-container iframe');
+        video.contentWindow.postMessage('{"method":"play"}', '*');
       }
-
-      playVideoAtTime();
+      setTimeout(playVideo, getMillisecondsUntilTime(14, 13));
+      
+      function getMillisecondsUntilTime(hours, minutes) {
+        var now = new Date();
+        var target = new Date();
+        target.setHours(hours, minutes, 0, 0);
+        if (target <= now) {
+          target.setDate(target.getDate() + 1);
+        }
+        return target - now;
+      }
     </script>
   </body>
 </html>
