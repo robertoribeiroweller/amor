@@ -1,11 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-        <meta charset="UTF-8">
-        <title>Tela Inicial</title>
-        <link rel="stylesheet" href="estilo.css">
-</head>
-<body>
-        <h1>Eu amo muito a Sara!</h1>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <title>Reprodução automática de vídeo do Vimeo</title>
+    <style>
+      #player {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%;
+      }
+      #player iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="player"></div>
+    <script>
+      function playVideoAtTime() {
+        var currentTime = new Date();
+        var targetTime = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), 14, 10, 0);
+        var timeUntilTarget = targetTime.getTime() - currentTime.getTime();
+        if (timeUntilTarget <= 0) {
+          playVideo();
+        } else {
+          setTimeout(playVideo, timeUntilTarget);
+        }
+      }
+
+      function playVideo() {
+        var player = document.getElementById("player");
+        player.innerHTML = '<iframe src="https://player.vimeo.com/video/202228191?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+      }
+
+      playVideoAtTime();
+    </script>
+  </body>
 </html>
