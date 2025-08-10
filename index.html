@@ -1,157 +1,194 @@
-/*
-Projeto: Site "Meus Animes" (single-file React)
-Instruções rápidas:
-1) Copie este arquivo para um projeto React (p.ex. criado com `npm create vite@latest my-animes --template react`).
-2) Instale TailwindCSS ou use o CDN no index.html para estilos rápidos.
-3) Substitua a lista `initialAnimes` pelo seu JSON de animes (veja o exemplo abaixo).
-4) Para publicar no GitHub Pages: crie um repositório, commit/push, e ative Pages em Settings -> Pages (branch `main` / pasta `root`) ou configure `gh-pages`.
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Envio e Moderação de Vídeos</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
 
-Caso queira, eu posso gerar o projeto completo (package.json, index.html, actions) — diga a lista dos seus animes e se quer imagens, sinopses, ou filtros por gênero/ano.
-*/
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-import React, { useState } from "react";
+    header h1 {
+      font-weight: 700;
+      color: #2c3e50;
+    }
 
-// EXEMPLO: substitua por todos os animes que você gosta
-const initialAnimes = [
-  {
-    id: 1,
-    title: "Fullmetal Alchemist: Brotherhood",
-    year: 2009,
-    genres: ["Ação", "Aventura", "Drama"],
-    img: "https://via.placeholder.com/300x420?text=FMA:B",
-    synopsis:
-      "Dois irmãos alquimistas procuram a Pedra Filosofal para recuperar seus corpos após um experimento que deu errado.",
-    rating: 9.2
-  },
-  {
-    id: 2,
-    title: "Attack on Titan",
-    year: 2013,
-    genres: ["Ação", "Drama", "Fantasia"],
-    img: "https://via.placeholder.com/300x420?text=AoT",
-    synopsis:
-      "A humanidade luta para sobreviver contra gigantes devoradores de humanos chamados Titãs.",
-    rating: 9.0
-  },
-  {
-    id: 3,
-    title: "Your Name",
-    year: 2016,
-    genres: ["Romance", "Drama", "Ficção"],
-    img: "https://via.placeholder.com/300x420?text=Kimi+no+Na+wa",
-    synopsis:
-      "Dois jovens trocam de corpo misteriosamente e tentam desvendar o elo que os une.",
-    rating: 8.9
-  }
-];
+    form {
+      background: #fff;
+      padding: 20px;
+      max-width: 480px;
+      margin: 0 auto 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+    }
 
-export default function App() {
-  const [animes, setAnimes] = useState(initialAnimes);
-  const [query, setQuery] = useState("");
-  const [genreFilter, setGenreFilter] = useState("Todos");
+    form label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+    }
 
-  // Extrai gêneros únicos para filtro
-  const allGenres = [
-    "Todos",
-    ...Array.from(new Set(animes.flatMap((a) => a.genres)))
-  ];
+    form input[type="text"],
+    form input[type="file"] {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
 
-  const filtered = animes.filter((a) => {
-    const matchesQuery =
-      a.title.toLowerCase().includes(query.toLowerCase()) ||
-      (a.synopsis && a.synopsis.toLowerCase().includes(query.toLowerCase()));
-    const matchesGenre = genreFilter === "Todos" || a.genres.includes(genreFilter);
-    return matchesQuery && matchesGenre;
-  });
+    form input[type="file"] {
+      padding: 4px 8px;
+    }
 
-  // Função para adicionar um anime (exemplo rápido)
-  function addAnime(example) {
-    setAnimes((prev) => [
-      ...prev,
-      { ...example, id: prev.length ? prev[prev.length - 1].id + 1 : 1 }
-    ]);
-  }
+    form input[type="text"]:focus,
+    form input[type="file"]:focus {
+      border-color: #3498db;
+      outline: none;
+    }
 
-  return (
-    <div className="min-h-screen bg-gray-50 p-6 dark:bg-gray-900">
-      <header className="max-w-6xl mx-auto mb-6">
-        <h1 className="text-3xl font-extrabold mb-2">Meus Animes</h1>
-        <p className="text-sm text-gray-600 dark:text-gray-300">Um site simples com os animes que eu gosto — personalize à vontade.</p>
+    form button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
 
-        <div className="mt-4 flex flex-wrap gap-3 items-center">
-          <input
-            aria-label="buscar"
-            placeholder="Pesquisar por título ou sinopse..."
-            className="px-3 py-2 rounded border w-64"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+    form button:hover {
+      background-color: #2980b9;
+    }
 
-          <select
-            value={genreFilter}
-            onChange={(e) => setGenreFilter(e.target.value)}
-            className="px-3 py-2 rounded border"
-          >
-            {allGenres.map((g) => (
-              <option key={g} value={g}>
-                {g}
-              </option>
-            ))}
-          </select>
+    .videos-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+      gap: 20px;
+    }
 
-          <button
-            onClick={() =>
-              addAnime({
-                title: "Novo Anime",
-                year: 2025,
-                genres: ["Aventura"],
-                img: "https://via.placeholder.com/300x420?text=Novo",
-                synopsis: "Sinopse do novo anime.",
-                rating: 0
-              })
-            }
-            className="px-4 py-2 rounded bg-blue-600 text-white"
-          >
-            Adicionar exemplo
-          </button>
-        </div>
-      </header>
+    .video-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-      <main className="max-w-6xl mx-auto">
-        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filtered.map((anime) => (
-            <article key={anime.id} className="bg-white rounded-2xl shadow p-3 overflow-hidden dark:bg-gray-800">
-              <img src={anime.img} alt={anime.title} className="w-full h-56 object-cover rounded-lg mb-3" />
-              <h2 className="text-lg font-semibold">{anime.title} <span className="text-sm text-gray-500">({anime.year})</span></h2>
-              <div className="text-sm text-gray-500 mb-2">{anime.genres.join(" • ")}</div>
-              <p className="text-sm text-gray-700 dark:text-gray-200 line-clamp-3">{anime.synopsis}</p>
+    .video-card video {
+      width: 100%;
+      border-radius: 6px;
+      max-height: 180px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      background: black;
+    }
 
-              <div className="mt-3 flex items-center justify-between">
-                <div className="text-sm text-gray-600">Nota: {anime.rating || "—"}</div>
-                <button
-                  onClick={() => navigator.clipboard?.writeText(JSON.stringify(anime))}
-                  className="text-xs px-2 py-1 border rounded"
-                >
-                  Copiar JSON
-                </button>
-              </div>
-            </article>
-          ))}
-        </section>
+    .video-title {
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+      color: #34495e;
+    }
 
-        {filtered.length === 0 && (
-          <div className="text-center text-gray-500 mt-12">Nenhum anime encontrado — tente outro filtro ou adicione à lista.</div>
-        )}
-      </main>
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 14px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
 
-      <footer className="max-w-6xl mx-auto mt-10 text-sm text-gray-500">
-        <p>Como publicar no GitHub Pages (resumo):</p>
-        <ol className="list-decimal list-inside">
-          <li>Crie um repositório no GitHub e faça push do seu projeto.</li>
-          <li>Garanta que o build produza um `index.html` na raiz (ex.: `npm run build`).</li>
-          <li>Ative *Pages* em Settings → Pages e escolha a branch (main) e pasta (root / gh-pages conforme configuração).</li>
-        </ol>
-      </footer>
+  <header>
+    <h1>Envie seu Vídeo para Moderação</h1>
+  </header>
+
+  <form id="uploadForm">
+    <label for="title">Título do Vídeo</label>
+    <input type="text" id="title" name="title" placeholder="Digite o título" required />
+
+    <label for="videoFile">Selecione o vídeo</label>
+    <input type="file" id="videoFile" name="videoFile" accept="video/*" required />
+
+    <button type="submit">Enviar para Moderação</button>
+  </form>
+
+  <section>
+    <h2 style="text-align:center; margin-bottom: 20px;">Vídeos Aprovados</h2>
+    <div class="videos-container" id="videosContainer">
+      <!-- Vídeos aprovados vão aparecer aqui -->
     </div>
-  );
-}
+  </section>
+
+  <footer>
+    &copy; 2025 Seu Site de Vídeos - Todos os direitos reservados
+  </footer>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const videosContainer = document.getElementById('videosContainer');
+
+    // Simula aprovação do vídeo e exibe ele na lista de vídeos aprovados
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const titleInput = document.getElementById('title');
+      const videoInput = document.getElementById('videoFile');
+
+      if (videoInput.files.length === 0) {
+        alert('Por favor, selecione um arquivo de vídeo.');
+        return;
+      }
+
+      const file = videoInput.files[0];
+      const title = titleInput.value.trim();
+
+      // Simula aprovação automática (você faria a moderação aqui)
+      const videoURL = URL.createObjectURL(file);
+
+      // Cria o card do vídeo aprovado
+      const card = document.createElement('div');
+      card.className = 'video-card';
+
+      const videoElem = document.createElement('video');
+      videoElem.controls = true;
+      videoElem.src = videoURL;
+      videoElem.alt = title;
+
+      const titleElem = document.createElement('div');
+      titleElem.className = 'video-title';
+      titleElem.textContent = title;
+
+      card.appendChild(videoElem);
+      card.appendChild(titleElem);
+
+      videosContainer.appendChild(card);
+
+      // Limpa o formulário
+      form.reset();
+    });
+  </script>
+</body>
+</html>
+
