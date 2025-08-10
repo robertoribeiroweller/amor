@@ -1,44 +1,157 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Meu vídeo do Vimeo</title>
-    <style>
-      #video-container {
-        position: relative;
-        padding-bottom: 56.25%; /* proporcional à largura do vídeo (16:9) */
-        height: 0;
-      }
-      #video-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="video-container">
-      <iframe src="https://player.vimeo.com/video/502689810" frameborder="0" allowfullscreen></iframe>
+/*
+Projeto: Site "Meus Animes" (single-file React)
+Instruções rápidas:
+1) Copie este arquivo para um projeto React (p.ex. criado com `npm create vite@latest my-animes --template react`).
+2) Instale TailwindCSS ou use o CDN no index.html para estilos rápidos.
+3) Substitua a lista `initialAnimes` pelo seu JSON de animes (veja o exemplo abaixo).
+4) Para publicar no GitHub Pages: crie um repositório, commit/push, e ative Pages em Settings -> Pages (branch `main` / pasta `root`) ou configure `gh-pages`.
+
+Caso queira, eu posso gerar o projeto completo (package.json, index.html, actions) — diga a lista dos seus animes e se quer imagens, sinopses, ou filtros por gênero/ano.
+*/
+
+import React, { useState } from "react";
+
+// EXEMPLO: substitua por todos os animes que você gosta
+const initialAnimes = [
+  {
+    id: 1,
+    title: "Fullmetal Alchemist: Brotherhood",
+    year: 2009,
+    genres: ["Ação", "Aventura", "Drama"],
+    img: "https://via.placeholder.com/300x420?text=FMA:B",
+    synopsis:
+      "Dois irmãos alquimistas procuram a Pedra Filosofal para recuperar seus corpos após um experimento que deu errado.",
+    rating: 9.2
+  },
+  {
+    id: 2,
+    title: "Attack on Titan",
+    year: 2013,
+    genres: ["Ação", "Drama", "Fantasia"],
+    img: "https://via.placeholder.com/300x420?text=AoT",
+    synopsis:
+      "A humanidade luta para sobreviver contra gigantes devoradores de humanos chamados Titãs.",
+    rating: 9.0
+  },
+  {
+    id: 3,
+    title: "Your Name",
+    year: 2016,
+    genres: ["Romance", "Drama", "Ficção"],
+    img: "https://via.placeholder.com/300x420?text=Kimi+no+Na+wa",
+    synopsis:
+      "Dois jovens trocam de corpo misteriosamente e tentam desvendar o elo que os une.",
+    rating: 8.9
+  }
+];
+
+export default function App() {
+  const [animes, setAnimes] = useState(initialAnimes);
+  const [query, setQuery] = useState("");
+  const [genreFilter, setGenreFilter] = useState("Todos");
+
+  // Extrai gêneros únicos para filtro
+  const allGenres = [
+    "Todos",
+    ...Array.from(new Set(animes.flatMap((a) => a.genres)))
+  ];
+
+  const filtered = animes.filter((a) => {
+    const matchesQuery =
+      a.title.toLowerCase().includes(query.toLowerCase()) ||
+      (a.synopsis && a.synopsis.toLowerCase().includes(query.toLowerCase()));
+    const matchesGenre = genreFilter === "Todos" || a.genres.includes(genreFilter);
+    return matchesQuery && matchesGenre;
+  });
+
+  // Função para adicionar um anime (exemplo rápido)
+  function addAnime(example) {
+    setAnimes((prev) => [
+      ...prev,
+      { ...example, id: prev.length ? prev[prev.length - 1].id + 1 : 1 }
+    ]);
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6 dark:bg-gray-900">
+      <header className="max-w-6xl mx-auto mb-6">
+        <h1 className="text-3xl font-extrabold mb-2">Meus Animes</h1>
+        <p className="text-sm text-gray-600 dark:text-gray-300">Um site simples com os animes que eu gosto — personalize à vontade.</p>
+
+        <div className="mt-4 flex flex-wrap gap-3 items-center">
+          <input
+            aria-label="buscar"
+            placeholder="Pesquisar por título ou sinopse..."
+            className="px-3 py-2 rounded border w-64"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+
+          <select
+            value={genreFilter}
+            onChange={(e) => setGenreFilter(e.target.value)}
+            className="px-3 py-2 rounded border"
+          >
+            {allGenres.map((g) => (
+              <option key={g} value={g}>
+                {g}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={() =>
+              addAnime({
+                title: "Novo Anime",
+                year: 2025,
+                genres: ["Aventura"],
+                img: "https://via.placeholder.com/300x420?text=Novo",
+                synopsis: "Sinopse do novo anime.",
+                rating: 0
+              })
+            }
+            className="px-4 py-2 rounded bg-blue-600 text-white"
+          >
+            Adicionar exemplo
+          </button>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto">
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filtered.map((anime) => (
+            <article key={anime.id} className="bg-white rounded-2xl shadow p-3 overflow-hidden dark:bg-gray-800">
+              <img src={anime.img} alt={anime.title} className="w-full h-56 object-cover rounded-lg mb-3" />
+              <h2 className="text-lg font-semibold">{anime.title} <span className="text-sm text-gray-500">({anime.year})</span></h2>
+              <div className="text-sm text-gray-500 mb-2">{anime.genres.join(" • ")}</div>
+              <p className="text-sm text-gray-700 dark:text-gray-200 line-clamp-3">{anime.synopsis}</p>
+
+              <div className="mt-3 flex items-center justify-between">
+                <div className="text-sm text-gray-600">Nota: {anime.rating || "—"}</div>
+                <button
+                  onClick={() => navigator.clipboard?.writeText(JSON.stringify(anime))}
+                  className="text-xs px-2 py-1 border rounded"
+                >
+                  Copiar JSON
+                </button>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        {filtered.length === 0 && (
+          <div className="text-center text-gray-500 mt-12">Nenhum anime encontrado — tente outro filtro ou adicione à lista.</div>
+        )}
+      </main>
+
+      <footer className="max-w-6xl mx-auto mt-10 text-sm text-gray-500">
+        <p>Como publicar no GitHub Pages (resumo):</p>
+        <ol className="list-decimal list-inside">
+          <li>Crie um repositório no GitHub e faça push do seu projeto.</li>
+          <li>Garanta que o build produza um `index.html` na raiz (ex.: `npm run build`).</li>
+          <li>Ative *Pages* em Settings → Pages e escolha a branch (main) e pasta (root / gh-pages conforme configuração).</li>
+        </ol>
+      </footer>
     </div>
-    <script>
-      function playVideo() {
-        var video = document.querySelector('#video-container iframe');
-        video.contentWindow.postMessage('{"method":"play"}', '*');
-      }
-      setTimeout(playVideo, getMillisecondsUntilTime(16, 22));
-      
-      function getMillisecondsUntilTime(hours, minutes) {
-        var now = new Date();
-        var target = new Date();
-        target.setHours(hours, minutes, 0, 0);
-        if (target <= now) {
-          target.setDate(target.getDate() + 1);
-        }
-        return target - now;
-      }
-    </script>
-<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="53e73d34-bc0c-4df3-85a0-6fb1471696dc";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-  </body>
-</html>
+  );
+}
