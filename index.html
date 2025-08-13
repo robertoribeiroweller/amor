@@ -18,11 +18,6 @@
       margin-bottom: 30px;
     }
 
-    header h1 {
-      font-weight: 700;
-      color: #2c3e50;
-    }
-
     form {
       background: #fff;
       padding: 20px;
@@ -47,17 +42,6 @@
       margin-bottom: 15px;
       font-size: 16px;
       box-sizing: border-box;
-      transition: border-color 0.3s ease;
-    }
-
-    form input[type="file"] {
-      padding: 4px 8px;
-    }
-
-    form input[type="text"]:focus,
-    form input[type="file"]:focus {
-      border-color: #3498db;
-      outline: none;
     }
 
     form button {
@@ -68,7 +52,6 @@
       font-size: 16px;
       border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
       width: 100%;
     }
 
@@ -77,10 +60,10 @@
     }
 
     .videos-container {
-      max-width: 900px;
+      max-width: 1100px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
     }
 
@@ -89,24 +72,44 @@
       border-radius: 8px;
       box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
       padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      text-align: center;
     }
 
-    .video-card video {
+    .video-thumb {
+      position: relative;
+      display: inline-block;
       width: 100%;
-      border-radius: 6px;
-      max-height: 180px;
+      cursor: pointer;
+    }
+
+    .video-thumb img {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
       object-fit: cover;
-      margin-bottom: 10px;
+      max-height: 180px;
       background: black;
+    }
+
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      padding: 15px;
+    }
+
+    .play-icon svg {
+      width: 40px;
+      height: 40px;
+      fill: #fff;
     }
 
     .video-title {
       font-weight: 600;
-      text-align: center;
-      margin-bottom: 8px;
+      margin-top: 8px;
       color: #34495e;
     }
 
@@ -137,70 +140,45 @@
   <section>
     <h2 style="text-align:center; margin-bottom: 20px;">Vídeos Aprovados</h2>
     <div class="videos-container" id="videosContainer">
-      <!-- Vídeos aprovados vão aparecer aqui -->
-      <a href="https://drive.google.com/file/d/1-0qOoRlHD-Pn_ZQgK1RSjGLcAwAx3qGA/view?usp=sharing" target="_blank" style="text-decoration: none; color: inherit;">
-  <div style="position: relative; display: inline-block; width: 320px; cursor: pointer;">
-    <!-- Imagem de capa (miniatura selecionada acima) -->
-    <img src="https://a.storyblok.com/f/178900/800x450/941f61f31d/grand-blue-dreaming.jpg/m/filters:quality(95)format(webp)" alt="Grand Blue Season 2 06" style="width: 100%; display: block; border-radius: 8px;">
-
-    <!-- Ícone de play sobreposto -->
-    <div style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-      padding: 15px;
-    ">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#fff" viewBox="0 0 16 16">
-        <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l4.5-2.5a.5.5 0 0 0 0-.814l-4.5-2.5z"/>
-      </svg>
       
-    </div>
-    
-  </div>
-
-  <!-- Título abaixo da miniatura -->
-  <p style="margin-top: 8px; font-size: 16px; font-weight: bold; text-align: center;">
-    Grand Blue Season 2 06
-  </p>
-</a>
-
+      <!-- Exemplo de vídeo fixo -->
+      <div class="video-card">
+        <a href="https://drive.google.com/file/d/1-0qOoRlHD-Pn_ZQgK1RSjGLcAwAx3qGA/view?usp=sharing" target="_blank" class="video-thumb">
+          <img src="https://a.storyblok.com/f/178900/800x450/941f61f31d/grand-blue-dreaming.jpg/m/filters:quality(95)format(webp)" alt="Grand Blue Season 2 06">
+          <div class="play-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+              <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l4.5-2.5a.5.5 0 0 0 0-.814l-4.5-2.5z"/>
+            </svg>
+          </div>
+        </a>
+        <div class="video-title">Grand Blue Season 2 06</div>
       </div>
-      <div class="videos-container" id="videosContainer">
-      <!-- Vídeos aprovados vão aparecer aqui -->
-      <a href="https://drive.google.com/file/d/1Vxgbnale8eqCPex7t6hjW-A6-AkhSPhx/view" target="_blank" style="text-decoration: none; color: inherit;">
-  <div style="position: relative; display: inline-block; width: 320px; cursor: pointer;">
-    <!-- Imagem de capa (miniatura selecionada acima) -->
-    <img src="https://static.anime21.blog.br/2020/07/CAPA-11.jpg" alt="Kanojo, Okarishimasu 4th Season 07" style="width: 100%; display: block; border-radius: 8px;">
 
-    <!-- Ícone de play sobreposto -->
-    <div style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-      padding: 15px;
-    ">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#fff" viewBox="0 0 16 16">
-        <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l4.5-2.5a.5.5 0 0 0 0-.814l-4.5-2.5z"/>
-      </svg>
+      <div class="video-card">
+        <a href="https://drive.google.com/file/d/1Vxgbnale8eqCPex7t6hjW-A6-AkhSPhx/view" target="_blank" class="video-thumb">
+          <img src="https://static.anime21.blog.br/2020/07/CAPA-11.jpg" alt="Kanojo, Okarishimasu 4th Season 07">
+          <div class="play-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+              <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l4.5-2.5a.5.5 0 0 0 0-.814l-4.5-2.5z"/>
+            </svg>
+          </div>
+        </a>
+        <div class="video-title">Kanojo Okarishimasu 4th Season ep 7</div>
+      </div>
       
-    </div>
-    
-  </div>
-
-  <!-- Título abaixo da miniatura -->
-  <p style="margin-top: 8px; font-size: 16px; font-weight: bold; text-align: center;">
-    Assistir Kanojo Okarishimasu 4th Season ep 7
-  </p>
-</a>
-
+      <div class="video-card">
+        <a href="https://drive.google.com/file/d/1ZmX5AyzwGoN4qa7uRKjsdUnI5H5oNw7K/view?usp=sharing" target="_blank" class="video-thumb">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhmfaz4Nz4v0LqL25HOMO9GYNwlOXxdYDmSTzVdQ8Ag7hLQK7eRLJmbeTjMSfZYtLyQqGkNx_0ajUy8Yvh8yOoPkZnI60Mq53Jh7rC0kU7KFhzZjMHBobwCRA0auQCnsSgh7jhPtfYqqAc/w500-h500-p-k-no-nu/Kakkou-no-Iinazuke.jpg" alt="Kanojo, Okarishimasu 4th Season 07">
+          <div class="play-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+              <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l4.5-2.5a.5.5 0 0 0 0-.814l-4.5-2.5z"/>
+            </svg>
+          </div>
+        </a>
+        <div class="video-title">Assistir Kakkou no Iinazuke Season 2 ep 6</div>
       </div>
-  </div>
+
+    </div>
   </section>
         
   <footer>
@@ -211,46 +189,72 @@
     const form = document.getElementById('uploadForm');
     const videosContainer = document.getElementById('videosContainer');
 
-    // Simula aprovação do vídeo e exibe ele na lista de vídeos aprovados
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const titleInput = document.getElementById('title');
-      const videoInput = document.getElementById('videoFile');
+      const title = document.getElementById('title').value.trim();
+      const file = document.getElementById('videoFile').files[0];
 
-      if (videoInput.files.length === 0) {
-        alert('Por favor, selecione um arquivo de vídeo.');
+      if (!file) {
+        alert('Selecione um vídeo.');
         return;
       }
 
-      const file = videoInput.files[0];
-      const title = titleInput.value.trim();
-
-      // Simula aprovação automática (você faria a moderação aqui)
       const videoURL = URL.createObjectURL(file);
 
-      // Cria o card do vídeo aprovado
-      const card = document.createElement('div');
-      card.className = 'video-card';
+      // Criar miniatura automática do vídeo
+      const video = document.createElement('video');
+      video.src = videoURL;
+      video.currentTime = 1; // Captura no início
+      video.muted = true;
+      video.play();
 
-      const videoElem = document.createElement('video');
-      videoElem.controls = true;
-      videoElem.src = videoURL;
-      videoElem.alt = title;
+      video.addEventListener('loadeddata', () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const thumbnailURL = canvas.toDataURL();
 
-      const titleElem = document.createElement('div');
-      titleElem.className = 'video-title';
-      titleElem.textContent = title;
+        // Criar card
+        const card = document.createElement('div');
+        card.className = 'video-card';
 
-      card.appendChild(videoElem);
-      card.appendChild(titleElem);
+        const link = document.createElement('a');
+        link.href = videoURL;
+        link.target = "_blank";
+        link.className = 'video-thumb';
 
-      videosContainer.appendChild(card);
+        const img = document.createElement('img');
+        img.src = thumbnailURL;
+        img.alt = title;
 
-      // Limpa o formulário
-      form.reset();
+        const playIcon = document.createElement('div');
+        playIcon.className = 'play-icon';
+        playIcon.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+            <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l4.5-2.5a.5.5 0 0 0 0-.814l-4.5-2.5z"/>
+          </svg>
+        `;
+
+        link.appendChild(img);
+        link.appendChild(playIcon);
+
+        const titleElem = document.createElement('div');
+        titleElem.className = 'video-title';
+        titleElem.textContent = title;
+
+        card.appendChild(link);
+        card.appendChild(titleElem);
+
+        videosContainer.appendChild(card);
+
+        form.reset();
+      });
     });
   </script>
+
 </body>
 </html>
 
