@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meu Catálogo de Filmes</title>
+  <meta name="description" content="Catálogo de filmes – template HTML/CSS responsivo" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0f17;
+      --surface: #0f1624;
+      --card: #121b2e;
+      --muted: #8ba3c7;
+      --text: #e6eefc;
+      --primary: #6ea8ff;
+      --accent: #58f1c1;
+      --ring: rgba(110,168,255,.45);
+      --radius: 20px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --shadow-2: 0 20px 50px rgba(0,0,0,.45);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu; color:var(--text);
+      background: radial-gradient(1200px 600px at 10% -10%, #1a2440 0%, transparent 60%),
+                  radial-gradient(900px 500px at 110% -20%, #14213f 0%, transparent 60%),
+                  var(--bg);
+      line-height:1.6;
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1200px; margin:0 auto; padding:24px}
+    header.hero{
+      position:relative; overflow:hidden; padding:48px 24px 64px; isolation:isolate;
+      background: linear-gradient(140deg, rgba(110,168,255,.12), rgba(88,241,193,.08));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .hero .container{display:grid; grid-template-columns:1.1fr .9fr; gap:24px; align-items:center}
+    .brand{display:flex; align-items:center; gap:12px; margin-bottom:16px}
+    .brand .logo{width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:linear-gradient(135deg, var(--primary), var(--accent)); box-shadow:var(--shadow)}
+    .brand .logo span{font-weight:800; color:#081120}
+    h1{margin:0; font-size:clamp(28px, 4vw, 44px); line-height:1.1}
+    p.lead{margin:.6rem 0 1.2rem; color:var(--muted); font-size:clamp(14px,1.6vw,18px)}
+    .actions{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{padding:12px 16px; border-radius:14px; font-weight:600; letter-spacing:.2px; display:inline-flex; align-items:center; gap:10px; transition:.25s ease; border:1px solid transparent; backdrop-filter: blur(6px)}
+    .btn.primary{background:linear-gradient(135deg, rgba(110,168,255,.15), rgba(110,168,255,.05)); border-color:rgba(110,168,255,.35)}
+    .btn.primary:hover{transform:translateY(-1px); box-shadow:var(--shadow); border-color:var(--primary)}
+    .btn.ghost{background:rgba(255,255,255,.03); border-color:rgba(255,255,255,.08)}
+    .btn.ghost:hover{transform:translateY(-1px); box-shadow:var(--shadow)}
+    .hero-art{position:relative; height:100%; min-height:260px; border-radius:var(--radius); background:radial-gradient(800px 400px at 60% -20%, rgba(110,168,255,.15), transparent 70%), linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.06); box-shadow:var(--shadow-2);}
+    .hero-art::after{content:""; position:absolute; inset:0; background:
+      radial-gradient(200px 80px at 30% 20%, rgba(88,241,193,.25), transparent 60%),
+      radial-gradient(220px 110px at 70% 40%, rgba(110,168,255,.25), transparent 60%);
+      mix-blend: screen; opacity:.6}
+    /* nav */
+    nav.catbar{position:sticky; top:0; backdrop-filter: blur(8px); z-index:50; border-bottom:1px solid rgba(255,255,255,.06);
+      background:linear-gradient(180deg, rgba(11,15,23,.8), rgba(11,15,23,.6));}
+    .catbar .container{display:flex; gap:12px; overflow:auto; padding-block:12px}
+    .chip{padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.12); color:var(--muted); font-weight:600; white-space:nowrap}
+    .chip:hover{border-color:var(--primary); color:var(--text)}
+    /* grid */
+    section{padding:32px 0}
+    .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px}
+    .section-head h2{margin:0; font-size:clamp(18px,2.2vw,24px)}
+    .section-head .hint{color:var(--muted); font-size:14px}
+    .grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:16px}
+    @media(min-width:720px){.grid{grid-template-columns:repeat(3, 1fr)}}
+    @media(min-width:1024px){.grid{grid-template-columns:repeat(5, 1fr)}}
+    .card{position:relative; overflow:hidden; border-radius:calc(var(--radius) - 6px); background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.06); box-shadow:var(--shadow); min-height:260px}
+    .thumb{position:relative; aspect-ratio:2/3; background:#0b1220; overflow:hidden}
+    .thumb img{width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.02) saturate(1.06)}
+    .badge{position:absolute; top:10px; left:10px; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; color:var(--text); background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.12)}
+    .content{padding:12px}
+    .title{font-weight:700; margin:0 0 4px; font-size:14px}
+    .meta{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:12px}
+    .play{position:absolute; inset:auto 10px 10px auto; padding:10px 12px; border-radius:14px; font-weight:800; background:linear-gradient(135deg, var(--primary), var(--accent)); color:#0b1020; box-shadow:var(--shadow);}
+    .play:hover{transform:translateY(-1px)}
+    footer{padding:28px 24px 44px; color:var(--muted); text-align:center; border-top:1px solid rgba(255,255,255,.06)}
+    .note{font-size:12px; margin-top:8px}
+    /* helpers */
+    .sr{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <div>
+        <div class="brand">
+          <div class="logo"><span>🎬</span></div>
+          <strong>Meu Catálogo</strong>
+        </div>
+        <h1>Seu hub pessoal de filmes</h1>
+        <p class="lead">Um template elegante e responsivo para organizar seus títulos. Substitua os links pelos conteúdos que você tem autorização para compartilhar.</p>
+        <div class="actions">
+          <a class="btn primary" href="#gdrive">Ver GDRIVE</a>
+          <a class="btn ghost" href="#acao">Ação</a>
+          <a class="btn ghost" href="#romance">Romance</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <nav class="catbar">
+    <div class="container">
+      <a class="chip" href="#gdrive">GDRIVE</a>
+      <a class="chip" href="#acao">Ação</a>
+      <a class="chip" href="#romance">Romance</a>
+      <a class="chip" href="#terror">Terror</a>
+      <a class="chip" href="#ficcao">Ficção</a>
+      <a class="chip" href="#drama">Drama</a>
+      <a class="chip" href="#animacao">Animação</a>
+    </div>
+  </nav>
+
+  <!-- SEÇÃO MODELO: COPIE UM CARD E SUBSTITUA O HREF E A IMAGEM -->
+  <main class="container">
+
+    <section id="gdrive">
+      <div class="section-head">
+        <h2>GDRIVE</h2>
+        <span class="hint">Cole aqui seus títulos desta categoria</span>
+      </div>
+      <div class="grid">
+        <!-- CARD EXEMPLO 1 -->
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/0y8Ftya.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">GDRIVE</span>
+            <!--
+              SUBSTITUA o link abaixo por um link legal/permitido.
+              Ex.: href="https://seu-dominio.com/videos/arquivo.mp4" ou página com player autorizado.
+            -->
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">Título do Filme</h3>
+            <div class="meta">2016 • 1h55 • Ação</div>
+          </div>
+        </article>
+
+        <!-- CARD EXEMPLO 2 -->
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/4QmQpQd.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">GDRIVE</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">Outro Título</h3>
+            <div class="meta">2015 • 2h10 • Drama</div>
+          </div>
+        </article>
+
+        <!-- Duplique os <article class="card"> conforme necessário -->
+      </div>
+    </section>
+
+    <section id="acao">
+      <div class="section-head">
+        <h2>Ação</h2>
+        <span class="hint">Exemplos de cards</span>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/qQyN5vC.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Ação</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">Missão Impossível</h3>
+            <div class="meta">2015 • 2h11 • Ação</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/1hV4cZb.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Ação</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">Velozes &amp; Furiosos</h3>
+            <div class="meta">2015 • 2h17 • Ação</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="romance">
+      <div class="section-head">
+        <h2>Romance</h2>
+        <span class="hint">Adicionar seus links autorizados</span>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/3t3q3wv.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Romance</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">Cidades de Papel</h3>
+            <div class="meta">2015 • 1h49 • Romance</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/0f0lN3W.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Romance</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">Orgulho &amp; Preconceito</h3>
+            <div class="meta">2005 • 2h07 • Romance</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="terror">
+      <div class="section-head">
+        <h2>Terror</h2>
+        <span class="hint">Catálogo temático</span>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/2mTUR4r.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Terror</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">A Bruxa</h3>
+            <div class="meta">2015 • 1h32 • Terror</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="ficcao">
+      <div class="section-head">
+        <h2>Ficção</h2>
+        <span class="hint">Sci‑fi e aventura</span>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/7r8A6lv.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Ficção</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">Interestelar</h3>
+            <div class="meta">2014 • 2h49 • Ficção</div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/dwRzXJQ.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Ficção</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">O Código Da Vinci</h3>
+            <div class="meta">2006 • 2h29 • Mistério</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="drama">
+      <div class="section-head">
+        <h2>Drama</h2>
+        <span class="hint">Exiba seus favoritos</span>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/0qH5D7x.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Drama</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">O Jogo da Imitação</h3>
+            <div class="meta">2014 • 1h53 • Drama</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="animacao">
+      <div class="section-head">
+        <h2>Animação</h2>
+        <span class="hint">Para todas as idades</span>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="thumb">
+            <img src="https://i.imgur.com/k7hR8xP.jpeg" alt="Poster do filme" loading="lazy"/>
+            <span class="badge">Animação</span>
+            <a class="play" href="#" target="_blank" rel="noopener">Assistir</a>
+          </div>
+          <div class="content">
+            <h3 class="title">Zootopia</h3>
+            <div class="meta">2016 • 1h48 • Animação</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <strong>Meu Catálogo</strong> — Template HTML/CSS.
+    <div class="note">Use apenas conteúdos que você tenha direitos de distribuir/embutir. Este template não hospeda nem fornece mídias.</div>
+  </footer>
+</body>
+</html>
+
